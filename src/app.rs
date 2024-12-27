@@ -21,13 +21,13 @@ impl TemplateApp {
 impl eframe::App for TemplateApp {
     fn update(&mut self, ctx: &egui::Context, _frame: &mut eframe::Frame) {
         egui::TopBottomPanel::top("top_panel").show(ctx, |ui| {
-            //update_header(ui, ctx);
-            self.asset_browser.show(ui);
+            //update_header(ctx, ui);
+            self.asset_browser.show(ctx, ui);
         });
     }
 }
 
-fn update_header(ui:&mut egui::Ui, ctx: &egui::Context) {
+fn update_header(ctx: &egui::Context, ui:&mut egui::Ui) {
     egui::menu::bar(ui, |ui| {
         ui.menu_button("File", |ui| {
             if ui.button("Quit").clicked() {

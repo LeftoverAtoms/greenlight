@@ -1,48 +1,37 @@
+use egui::{Align, Layout, Ui};
 use egui_extras::{Column, TableBuilder};
 
 #[derive(Default)]
 pub struct AssetBrowser { }
 
 impl AssetBrowser {
-    pub fn show(&mut self, ui: &mut egui::Ui) {
-        ui.vertical(|ui| {
-            let table = TableBuilder::new(ui)
+    pub fn show(&mut self, ctx: &egui::Context, ui: &mut Ui) {
+        // Expand as much as possible.
+        let height: f32 = ctx.available_rect().height();
+        ui.set_max_height(height);
+        // ...
+        ui.vertical_centered_justified(|ui| {
+            TableBuilder::new(ui)
+            // Style.
+            .cell_layout(Layout::left_to_right(Align::Center))
             .striped(true)
-            .resizable(true)
-            .cell_layout(egui::Layout::left_to_right(egui::Align::Center))
-            .column(Column::auto())
-            .column(
-                Column::remainder()
-                    .at_least(40.0)
-                    .clip(true)
-                    .resizable(true),
-            )
-            .column(Column::auto())
+            // Must allocate space foreach column.
             .column(Column::remainder())
-            .column(Column::remainder())
-            .min_scrolled_height(0.0)
-            .max_scroll_height(800.0);
-
-            table
-                .header(20.0, |mut header| {
-                    header.col(|ui| {
-                        ui.strong("Clipped text");
+            // ...
+            .header(20.0, |mut header| {
+                // Define each column.
+                header.col(|ui| {
+                    ui.strong("Interaction");
+                });
+            })
+            .body(|mut body| {
+                for row_index in 0..8 {
+                    body.row(64.0, |mut row| {
+                        row.col(|ui| {
+                            ui.checkbox(&mut true, "Click me");
+                        });
                     });
-                    header.col(|ui| {
-                        ui.strong("Expanding content");
-                    });
-                    header.col(|ui| {
-                        ui.strong("Interaction");
-                    });
-                    header.col(|ui| {
-                        ui.strong("Content");
-                    });
-                })
-                .body(|mut body| {
-                    body.row(12.0, |mut row| {
-                        
-                    }
-                );
+                }
             });
         });
     }
