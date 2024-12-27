@@ -2,16 +2,27 @@ use egui::{Align, Layout, Ui};
 use egui_extras::{Column, TableBuilder};
 
 #[derive(Default)]
-pub struct AssetBrowser { }
+pub struct AssetBrowser {
+    pub text: String,
+}
 
 impl AssetBrowser {
     pub fn show(&mut self, ctx: &egui::Context, ui: &mut Ui) {
-        // Expand as much as possible.
-        let height: f32 = ctx.available_rect().height();
-        ui.set_max_height(height);
-        // ...
+        self.show_search(ui);
+
         ui.vertical_centered_justified(|ui| {
-            TableBuilder::new(ui)
+            self.show_table(ui);
+        });
+    }
+
+    fn show_search(&mut self, ui: &mut Ui) {
+        egui::TextEdit::singleline(&mut self.text)
+            .hint_text("Search")
+            .show(ui);
+    }
+
+    fn show_table(&mut self, ui: &mut Ui) {
+        TableBuilder::new(ui)
             // Style.
             .cell_layout(Layout::left_to_right(Align::Center))
             .striped(true)
@@ -33,6 +44,5 @@ impl AssetBrowser {
                     });
                 }
             });
-        });
     }
 }

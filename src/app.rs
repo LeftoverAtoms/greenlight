@@ -21,7 +21,8 @@ impl TemplateApp {
 impl eframe::App for TemplateApp {
     fn update(&mut self, ctx: &egui::Context, _frame: &mut eframe::Frame) {
         egui::TopBottomPanel::top("top_panel").show(ctx, |ui| {
-            //update_header(ctx, ui);
+            update_header(ctx, ui);
+            ui.add_space(8.0);
             self.asset_browser.show(ctx, ui);
         });
     }
