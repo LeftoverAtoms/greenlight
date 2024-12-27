@@ -2,3 +2,6 @@
 
 mod app;
 pub use app::TemplateApp;
+
+mod asset_browser;
+pub use asset_browser::AssetBrowser;
