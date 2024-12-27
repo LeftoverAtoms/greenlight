@@ -1,10 +1,10 @@
 use crate::AssetBrowser;
 
-pub struct TemplateApp {
+pub struct App {
     asset_browser: AssetBrowser,
 }
 
-impl Default for TemplateApp {
+impl Default for App {
     fn default() -> Self {
         Self {
             asset_browser: Default::default(),
@@ -12,13 +12,13 @@ impl Default for TemplateApp {
     }
 }
 
-impl TemplateApp {
+impl App {
     pub fn new(cc: &eframe::CreationContext<'_>) -> Self {
         Default::default()
     }
 }
 
-impl eframe::App for TemplateApp {
+impl eframe::App for App {
     fn update(&mut self, ctx: &egui::Context, _frame: &mut eframe::Frame) {
         egui::TopBottomPanel::top("top_panel").show(ctx, |ui| {
             update_header(ctx, ui);
