@@ -1,4 +1,7 @@
-use egui::{include_image, Align, CentralPanel, Color32, Context, Frame, Image, Layout, Margin, Rounding, SidePanel, Stroke, TextEdit, TopBottomPanel, Ui};
+use egui::{
+    include_image, Align, CentralPanel, Color32, Context, Frame, Image, Layout, Margin, Rounding,
+    SidePanel, Stroke, TextEdit, TopBottomPanel, Ui,
+};
 use egui_extras::{install_image_loaders, Column, TableBuilder};
 
 #[derive(Default)]
