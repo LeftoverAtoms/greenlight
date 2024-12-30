@@ -1,33 +1,46 @@
+use egui::{include_image, Align, CentralPanel, Color32, Context, Frame, Image, Layout, Margin, Rounding, SidePanel, Stroke, TextEdit, TopBottomPanel, Ui};
+use egui_extras::{install_image_loaders, Column, TableBuilder};
+
 #[derive(Default)]
 pub struct App {
     text: String,
 }
 
 impl App {
-    pub fn new(_cc: &eframe::CreationContext<'_>) -> Self {
+    pub fn new(cc: &eframe::CreationContext<'_>) -> Self {
+        install_image_loaders(&cc.egui_ctx);
         Default::default()
     }
 
-    fn show_search(&mut self, ui: &mut egui::Ui) {
-        egui::TextEdit::singleline(&mut self.text)
+    fn show_search(&mut self, ui: &mut Ui) {
+        let search_bar = TextEdit::singleline(&mut self.text)
             .hint_text("Search")
-            .show(ui);
+            .desired_width(256.0);
+
+        let frame = Frame::default()
+            .inner_margin(Margin::same(4.0))
+            .outer_margin(Margin::symmetric(0.0, 8.0))
+            .stroke(Stroke::new(1.0, Color32::DARK_GRAY));
+
+        frame.show(ui, |ui| search_bar.show(ui));
     }
 
-    fn show_table(&mut self, ui: &mut egui::Ui) {
-        egui_extras::TableBuilder::new(ui)
+    fn show_table(&mut self, ui: &mut Ui) {
+        TableBuilder::new(ui)
             // Improve visiblity.
             .striped(true)
             .resizable(true)
             // ...
-            .cell_layout(egui::Layout::left_to_right(egui::Align::Center))
+            .cell_layout(Layout::left_to_right(Align::Center))
             // Expand table to fit entire space.
             .auto_shrink(false)
+            // ...
+            .sense(egui::Sense::click())
             // Allocate space then define each column.
-            .column(egui_extras::Column::auto().at_least(128.0))
-            .column(egui_extras::Column::auto().at_least(128.0))
-            .column(egui_extras::Column::auto().at_least(128.0))
-            .column(egui_extras::Column::auto().at_least(128.0))
+            .column(Column::auto().at_least(256.0))
+            .column(Column::auto().at_least(128.0))
+            .column(Column::auto().at_least(128.0))
+            .column(Column::auto().at_least(128.0))
             .header(24.0, |mut header| {
                 header.col(|ui| {
                     ui.strong("Asset Name");
@@ -47,16 +60,16 @@ impl App {
                 for _ in 0..8 {
                     body.row(16.0, |mut row| {
                         row.col(|ui| {
-                            ui.colored_label(egui::Color32::WHITE, "c_zom_player_cia_fb");
+                            ui.colored_label(Color32::WHITE, "c_zom_player_cia_fb");
                         });
                         row.col(|ui| {
-                            ui.colored_label(egui::Color32::ORANGE, "Placeholder");
+                            ui.colored_label(Color32::ORANGE, "Placeholder");
                         });
                         row.col(|ui| {
-                            ui.colored_label(egui::Color32::WHITE, "Model");
+                            ui.colored_label(Color32::WHITE, "Model");
                         });
                         row.col(|ui| {
-                            ui.colored_label(egui::Color32::WHITE, "Bones: 102, LODs: 4");
+                            ui.colored_label(Color32::WHITE, "Bones: 102, LODs: 4");
                         });
                     });
                 }
@@ -65,30 +78,41 @@ impl App {
 }
 
 impl eframe::App for App {
-    fn update(&mut self, ctx: &egui::Context, _frame: &mut eframe::Frame) {
+    fn update(&mut self, ctx: &Context, _frame: &mut eframe::Frame) {
         // Header.
-        egui::TopBottomPanel::top("head").show(ctx, |ui| {
+        TopBottomPanel::top("head").show(ctx, |ui| {
             self.show_search(ui);
         });
 
         // Footer.
-        egui::TopBottomPanel::bottom("foot").show(ctx, |ui| {
-            self.show_search(ui);
+        TopBottomPanel::bottom("foot").show(ctx, |ui| {
+            let frame = Frame::default()
+                .inner_margin(Margin::same(2.0))
+                .outer_margin(Margin::symmetric(0.0, 8.0))
+                .rounding(Rounding::same(4.0))
+                .stroke(Stroke::new(1.0, Color32::DARK_GRAY));
+
+            ui.horizontal(|ui| {
+                frame.show(ui, |ui| ui.button("Load Game"));
+                frame.show(ui, |ui| ui.button("Load File"));
+                frame.show(ui, |ui| ui.button("Export Selected"));
+                frame.show(ui, |ui| ui.button("Export All"));
+                frame.show(ui, |ui| ui.button("Clear"));
+            });
         });
 
         // Preview.
-        egui::SidePanel::left("preview").show(ctx, |ui| {
-            ui.add(egui::Image::new(egui::include_image!(
-                "../assets/preview-default.png"
+        SidePanel::right("preview").show(ctx, |ui| {
+            ui.add(Image::new(include_image!(
+                "../assets/preview-left-the-oven-on.gif"
             )));
         });
 
         // Draw after other panels to prevent overlap.
-        egui::CentralPanel::default().show(ctx, |ui| {
-            let frame = egui::Frame::default()
-                .inner_margin(egui::Margin::same(16.0))
-                .rounding(egui::Rounding::same(8.0))
-                .stroke(egui::Stroke::new(2.0, egui::Color32::DARK_RED));
+        CentralPanel::default().show(ctx, |ui| {
+            let frame = Frame::default()
+                .inner_margin(Margin::same(8.0))
+                .stroke(Stroke::new(1.0, Color32::DARK_GRAY));
 
             frame.show(ui, |ui| self.show_table(ui));
         });
