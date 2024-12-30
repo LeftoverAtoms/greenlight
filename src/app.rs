@@ -1,6 +1,6 @@
 use egui::{
-    include_image, Align, CentralPanel, Color32, Context, Frame, Image, Layout, Margin, Rounding,
-    SidePanel, Stroke, TextEdit, TopBottomPanel, Ui,
+    include_image, Align, CentralPanel, Color32, Context, Frame, Image, Label, Layout, Margin,
+    RichText, Rounding, Sense, SidePanel, Stroke, TextEdit, TopBottomPanel, Ui, Widget
 };
 use egui_extras::{install_image_loaders, Column, TableBuilder};
 
@@ -32,13 +32,13 @@ impl App {
         TableBuilder::new(ui)
             // Improve visiblity.
             .striped(true)
-            .resizable(true)
+            //.resizable(true)
             // ...
             .cell_layout(Layout::left_to_right(Align::Center))
             // Expand table to fit entire space.
             .auto_shrink(false)
             // ...
-            .sense(egui::Sense::click())
+            .sense(Sense::click())
             // Allocate space then define each column.
             .column(Column::auto().at_least(256.0))
             .column(Column::auto().at_least(128.0))
@@ -46,33 +46,49 @@ impl App {
             .column(Column::auto().at_least(128.0))
             .header(24.0, |mut header| {
                 header.col(|ui| {
-                    ui.strong("Asset Name");
+                    Label::new(RichText::new("Asset Name").strong())
+                        .selectable(false)
+                        .ui(ui);
                 });
                 header.col(|ui| {
-                    ui.strong("Status");
+                    Label::new(RichText::new("Status").strong())
+                        .selectable(false)
+                        .ui(ui);
                 });
                 header.col(|ui| {
-                    ui.strong("Type");
+                    Label::new(RichText::new("Type").strong())
+                        .selectable(false)
+                        .ui(ui);
                 });
                 header.col(|ui| {
-                    ui.strong("Details");
+                    Label::new(RichText::new("Details").strong())
+                        .selectable(false)
+                        .ui(ui);
                 });
             })
             // TODO: Delete this later.. used for testing.
             .body(|mut body| {
-                for _ in 0..8 {
+                for _ in 0..128 {
                     body.row(16.0, |mut row| {
                         row.col(|ui| {
-                            ui.colored_label(Color32::WHITE, "c_zom_player_cia_fb");
+                            Label::new(RichText::new("c_zom_player_cia_fb").color(Color32::WHITE))
+                                .selectable(false)
+                                .ui(ui);
                         });
                         row.col(|ui| {
-                            ui.colored_label(Color32::ORANGE, "Placeholder");
+                            Label::new(RichText::new("Placeholder").color(Color32::ORANGE))
+                                .selectable(false)
+                                .ui(ui);
                         });
                         row.col(|ui| {
-                            ui.colored_label(Color32::WHITE, "Model");
+                            Label::new(RichText::new("Model").color(Color32::WHITE))
+                                .selectable(false)
+                                .ui(ui);
                         });
                         row.col(|ui| {
-                            ui.colored_label(Color32::WHITE, "Bones: 102, LODs: 4");
+                            Label::new(RichText::new("Bones: 102, LODs: 4").color(Color32::WHITE))
+                                .selectable(false)
+                                .ui(ui);
                         });
                     });
                 }
