@@ -2,9 +2,3 @@
 
 mod app;
 pub use app::App;
-
-mod asset_browser;
-pub use asset_browser::AssetBrowser;
-
-mod header;
-pub use header::Header;
