@@ -3,10 +3,20 @@ use egui::{
     RichText, Rounding, Sense, SidePanel, Stroke, TextEdit, TopBottomPanel, Ui, Widget
 };
 use egui_extras::{install_image_loaders, Column, TableBuilder};
+use std::collections::HashSet;
+
+use crate::IPAK;
 
 #[derive(Default)]
 pub struct App {
+    assets: HashSet<Asset>,
     text: String,
+}
+
+#[derive(Default, Eq, Hash, PartialEq)]
+pub struct Asset {
+    selected: bool,
+    name: String,
 }
 
 impl App {
@@ -68,25 +78,25 @@ impl App {
             })
             // TODO: Delete this later.. used for testing.
             .body(|mut body| {
-                for _ in 0..128 {
+                for asset in &self.assets {
                     body.row(16.0, |mut row| {
                         row.col(|ui| {
-                            Label::new(RichText::new("c_zom_player_cia_fb").color(Color32::WHITE))
+                            Label::new(RichText::new(&asset.name).color(Color32::WHITE))
                                 .selectable(false)
                                 .ui(ui);
                         });
                         row.col(|ui| {
-                            Label::new(RichText::new("Placeholder").color(Color32::ORANGE))
+                            Label::new(RichText::new("Unknown").color(Color32::ORANGE))
                                 .selectable(false)
                                 .ui(ui);
                         });
                         row.col(|ui| {
-                            Label::new(RichText::new("Model").color(Color32::WHITE))
+                            Label::new(RichText::new("Image").color(Color32::WHITE))
                                 .selectable(false)
                                 .ui(ui);
                         });
                         row.col(|ui| {
-                            Label::new(RichText::new("Bones: 102, LODs: 4").color(Color32::WHITE))
+                            Label::new(RichText::new("Unknown").color(Color32::WHITE))
                                 .selectable(false)
                                 .ui(ui);
                         });
@@ -113,7 +123,10 @@ impl eframe::App for App {
 
             ui.horizontal(|ui| {
                 frame.show(ui, |ui| ui.button("Load Game"));
-                frame.show(ui, |ui| ui.button("Load File"));
+                if frame.show(ui, |ui| ui.button("Load File")).inner.clicked() {
+                    let ipak = IPAK::parse("E:/DEV/greenlight/assets/patch.ipak");
+                    println!("0x{:08x}", ipak.magic);
+                }
                 frame.show(ui, |ui| ui.button("Export Selected"));
                 frame.show(ui, |ui| ui.button("Export All"));
                 frame.show(ui, |ui| ui.button("Clear"));
