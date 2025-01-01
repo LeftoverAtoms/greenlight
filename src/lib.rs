@@ -4,4 +4,4 @@ mod app;
 pub use app::App;
 
 mod ipak;
-pub use ipak::IPAK;
+pub use ipak::IPak;

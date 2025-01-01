@@ -5,18 +5,18 @@ use egui::{
 use egui_extras::{install_image_loaders, Column, TableBuilder};
 use std::collections::HashSet;
 
-use crate::IPAK;
+use crate::IPak;
 
 #[derive(Default)]
 pub struct App {
-    assets: HashSet<Asset>,
+    pub assets: HashSet<Asset>,
     text: String,
 }
 
 #[derive(Default, Eq, Hash, PartialEq)]
 pub struct Asset {
-    selected: bool,
-    name: String,
+    pub selected: bool,
+    pub name: String,
 }
 
 impl App {
@@ -124,8 +124,7 @@ impl eframe::App for App {
             ui.horizontal(|ui| {
                 frame.show(ui, |ui| ui.button("Load Game"));
                 if frame.show(ui, |ui| ui.button("Load File")).inner.clicked() {
-                    let ipak = IPAK::parse("E:/DEV/greenlight/assets/patch.ipak");
-                    println!("0x{:08x}", ipak.magic);
+                    IPak::parse(self, "E:/DEV/greenlight/assets/patch_zm.ipak");
                 }
                 frame.show(ui, |ui| ui.button("Export Selected"));
                 frame.show(ui, |ui| ui.button("Export All"));
